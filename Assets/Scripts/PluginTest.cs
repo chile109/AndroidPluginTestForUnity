@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// https://www.youtube.com/watch?v=bmNMugkOQBI
+/// </summary>
 public class PluginTest : MonoBehaviour {
 
 	const string pluginName = "com.example.unity.MyPlugin";
@@ -23,6 +25,8 @@ public class PluginTest : MonoBehaviour {
 				alertHandler(index);
 		}
 	}
+
+	// Android的Java接口 
 	static AndroidJavaClass _pluginClass;
 	static AndroidJavaObject _pluginInstance;
 
@@ -32,9 +36,9 @@ public class PluginTest : MonoBehaviour {
 			if(_pluginClass == null)
 			{
 				_pluginClass = new AndroidJavaClass(pluginName);
-				AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-				AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");
-				_pluginClass.SetStatic<AndroidJavaObject>("mainActivity", activity);
+				AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");	//UnityPlayer是FrameLayout的一个子类
+				AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");	//currentActivity则是UnityPlayer类中的静态对象。
+				_pluginClass.SetStatic<AndroidJavaObject>("mainActivity", activity);	//將UnityPlayer的currentActivity傳給java端的mainActivity
 			}
 			return _pluginClass;
 		}
@@ -44,7 +48,7 @@ public class PluginTest : MonoBehaviour {
 		get{
 			if(_pluginInstance == null)
 			{
-				_pluginInstance = pluginClass.CallStatic<AndroidJavaObject>("getInstance");
+				_pluginInstance = pluginClass.CallStatic<AndroidJavaObject>("getInstance");		//呼叫靜態方法getInstance取得方法實例
 			}
 			return _pluginInstance;
 		}
@@ -60,7 +64,7 @@ public class PluginTest : MonoBehaviour {
 	void Update () {
 		elapsedTime += Time.deltaTime;
 		if(elapsedTime >= 5)
-		{
+		{//	每五秒發送一次手機計時
 			elapsedTime -= 5;
 			Debug.Log("Tick: " + getElapsedTime());
 		}
@@ -73,6 +77,7 @@ public class PluginTest : MonoBehaviour {
 		}
 	} 
 
+	//返回java端getElapseTime的值
 	double getElapsedTime()
 	{
 		if (Application.platform == RuntimePlatform.Android)
@@ -94,7 +99,7 @@ public class PluginTest : MonoBehaviour {
 		}
 
 		if (Application.platform == RuntimePlatform.Android)
-			PluginInstance.Call("showAlertView", new object[] { strings, new AlertViewCallback(handler) });
+			PluginInstance.Call("showAlertView", new object[] { strings, new AlertViewCallback(handler) });	  //調用java端的showAlertView方法
 		else
 			Debug.LogWarning("AlertView not supportted on this platform");
 	}

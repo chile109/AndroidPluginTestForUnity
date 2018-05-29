@@ -8,13 +8,13 @@ import android.util.Log;
 public class MyPlugin {
 	private static final MyPlugin ourInstance = new MyPlugin();
 
-	private static final String LOGTAG = "CWTech";
+	private static final String LOGTAG = "CWTech";	//log文字內容
 
 	public static MyPlugin getInstance() {
 		return ourInstance;
 	}
 
-	public static Activity mainActivity;
+	public static Activity mainActivity;	//接收Unity頁面
 
 	public interface AlertViewCallback{
 		public void onButtonTapped(int id);
@@ -22,6 +22,7 @@ public class MyPlugin {
 
 	private long startTime;
 
+	//方法建構子，取得目前時間
 	private MyPlugin() {
 		Log.i(LOGTAG, "Create plugin");
 		startTime = System.currentTimeMillis();
@@ -47,6 +48,7 @@ public class MyPlugin {
 				Log.i(LOGTAG, "Tapped: " + id);
 				callback.onButtonTapped(id);
 			}
+
 		};
 
 		AlertDialog _alertDialog = new AlertDialog.Builder(mainActivity)
@@ -64,5 +66,6 @@ public class MyPlugin {
 
 		_alertDialog.show();
 	}
+
 }
 
