@@ -79,6 +79,7 @@ public class NojarAndroid {
 	public void setWifistatus (boolean state)
 	{
 		_wifi.setWifiEnabled(state);
+		showWifiStatus(state);
 	}
 
 	public void showWifiStatus(boolean state)
@@ -89,9 +90,32 @@ public class NojarAndroid {
 			int numberOfLevels = 5;
 			int level = WifiManager.calculateSignalLevel(connectionInfo.getRssi(), numberOfLevels);   //wifi強度分級
 
-			showToast("Wifi Level:" + level);
+			callUnity("Main Camera","FromAndroid", getDetailsWifiInfo());
+
+			showToast("wifi強度" + level);
 		}
 		else
 			showToast("未連接wifi");
+	}
+
+	//顯示wifi詳細資訊
+	public String getDetailsWifiInfo(){
+		StringBuffer sInfo = new StringBuffer();
+		WifiInfo mWifiInfo = _wifi.getConnectionInfo();
+
+		int Ip = mWifiInfo.getIpAddress();
+		String strIp = "" + (Ip & 0xFF) + "." + ((Ip >> 8) & 0xFF) + "." + ((Ip >> 16) & 0xFF) + "." + ((Ip >> 24) & 0xFF);
+
+		sInfo.append("\n--BSSID : "+mWifiInfo.getBSSID());	//获取BSSID地址。
+		sInfo.append("\n--SSID : "+mWifiInfo.getSSID());	// 获取SSID地址。  需要连接网络的ID
+		sInfo.append("\n--nIpAddress : "+ strIp);	//获取IP地址。4字节Int, XXX.XXX.XXX.XXX 每个XXX为一个字节
+		sInfo.append("\n--MacAddress : "+mWifiInfo.getMacAddress());	//获取MAC地址。
+		sInfo.append("\n--NetworkId : "+mWifiInfo.getNetworkId());	//获取网络ID。
+		sInfo.append("\n--LinkSpeed : "+mWifiInfo.getLinkSpeed()+"Mbps");	// 获取连接速度，可以让用户获知这一信息。
+		sInfo.append("\n--Rssi : "+mWifiInfo.getRssi());	//获取RSSI，RSSI就是接受信号强度指示  
+		sInfo.append("\n--SupplicantState : "+mWifiInfo.getSupplicantState());
+
+		sInfo.append("\n\n\n\n");
+		return sInfo.toString();
 	}
 }
