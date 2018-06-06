@@ -2,65 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using com.grepgame.android.plugin;
+using SimpleJSON;
 
 public class PhotoPlugin : MonoBehaviour {
+	public Image mImage;
 
-	AndroidJavaClass unityPlayer;
-	AndroidJavaObject currentActivity;
-
-	AndroidJavaObject _ajo;
-	Texture texture;
-
-	public RawImage Pic;
-	public Button _CameraBtn;
-	public Button _GalleyBtn;
-
-	// Use this for initialization
-	void Start () {
-
-		unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-		currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-
-		_ajo = new AndroidJavaObject("com.kevin.unity.NojarAndroid");
-		_ajo.CallStatic("init", currentActivity);
-
-		_CameraBtn.onClick.AddListener(delegate
-		{
-			PhotoGalley("takePhoto");
-		});
-
-		_GalleyBtn.onClick.AddListener(delegate
-		{
-			PhotoGalley("openGalley");
-		});
-	}
-	
-	void PhotoGalley(string target)
+	void Start()
 	{
-		_ajo.Call("PhotoMethod", target);
+		//handle Image data returned from Plugin
+		Koi.getInstance().imageDelegate = imageHandle;
+	}
+	//The result image
+
+	public void openGallery()
+	{
+		Koi.getInstance().openGallery();
 	}
 
-	void getTexture(string str)
+	public void openCamera()
 	{
-		//在Android插件中通知Unity开始去指定路径中找图片资源
-		StartCoroutine(LoadTexture(str));
-
+		Koi.getInstance().openCamera();
 	}
 
-	IEnumerator LoadTexture(string ImgName)
+	/**
+     * Create Image with data from Plugin
+     */
+	void imageHandle(string message, byte[] data)
 	{
-		//注解1
-		string path = "file://" + Application.persistentDataPath + "/" + ImgName;
 
-		WWW www = new WWW(path);
-		while (!www.isDone)
-		{
+		JSONArray jsa = (JSONArray)JSON.Parse(message);
+		JSONNode jsn = jsa[0];
+		int w = jsn["width"].AsInt;
+		int h = jsn["height"].AsInt;
 
-		}
-		yield return www;
-		//为贴图赋值
-		texture = www.texture;
-
-		Pic.texture = texture;
+		Texture2D xx = new Texture2D(w, h, TextureFormat.BGRA32, false);
+		xx.LoadImage(data);
+		Sprite newSprite = Sprite.Create(xx as Texture2D, new Rect(0f, 0f, xx.width, xx.height), Vector2.zero);
+		mImage.sprite = newSprite;
 	}
 }

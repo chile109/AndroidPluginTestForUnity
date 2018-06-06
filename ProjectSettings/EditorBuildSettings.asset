@@ -6,5 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scene.unity
-    guid: d94ee06ae80aa45ee93110efb36ce2fe
+    path: Assets/GalleyControl.unity
+    guid: a9f04c5141190422183da5f3dbbb7035

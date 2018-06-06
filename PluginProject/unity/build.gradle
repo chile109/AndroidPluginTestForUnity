@@ -28,9 +28,16 @@ dependencies {
     compileOnly files('libs/classes.jar')
 }
 
+//task to delete the old jar
+task cleanJar(type: Delete) {
+    delete project.name + '-release.aar'
+}
+
 task copyPlugin(type: Copy) {
     dependsOn assemble
     from('build/outputs/aar')
     into('../../Assets/Plugins/Android')
     include(project.name + '-release.aar')
 }
+
+copyPlugin.dependsOn(cleanJar, build)
