@@ -6,5 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Main.unity
+    guid: d94ee06ae80aa45ee93110efb36ce2fe
+  - enabled: 1
     path: Assets/GalleyControl.unity
     guid: a9f04c5141190422183da5f3dbbb7035
+  - enabled: 1
+    path: Assets/WifiControl.unity
+    guid: fb9367b7959b641a79b221bca5d7a8e5

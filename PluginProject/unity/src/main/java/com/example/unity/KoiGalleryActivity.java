@@ -60,7 +60,7 @@ public class KoiGalleryActivity extends Activity {
 
 						Log.d(Koi.KOI_TAG, "picturePath " + picturePath);
 						cursor.close();
-						bm = Util.decodeSampledBitmapFromFile(picturePath, 500, 500);
+						bm = Util.decodeSampledBitmapFromFile(picturePath);
 						
 						bm = Util.crop(bm);
 

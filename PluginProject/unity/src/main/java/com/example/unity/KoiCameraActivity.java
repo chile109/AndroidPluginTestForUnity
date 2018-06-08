@@ -51,15 +51,6 @@ public class KoiCameraActivity extends Activity {
 					Bitmap tmp = (Bitmap) b.get("data");
 					if (tmp != null) {
 						int w = tmp.getWidth(), h = tmp.getHeight();
-						if (w > 500) {
-							h = h * 500 / w;
-							w = 500;
-						}
-
-						if (h > 500) {
-							w = w * 500 / h;
-							h = 500;
-						}
 
 						bm = Bitmap.createScaledBitmap(tmp, w, h, true);
 						bm = Util.crop(bm);

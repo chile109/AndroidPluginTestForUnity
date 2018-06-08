@@ -22,7 +22,7 @@ public class Util {
 		
 	
 	
-	public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
+	public static Bitmap decodeSampledBitmapFromFile(String path) {
 
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
@@ -32,16 +32,6 @@ public class Util {
 		final int width = options.outWidth;
 		options.inPreferredConfig = Bitmap.Config.RGB_565;
 		int inSampleSize = 1;
-		if (height > reqHeight) {
-			inSampleSize = Math.round((float) height / (float) reqHeight);
-		}
-
-		int expectedWidth = width / inSampleSize;
-		if (expectedWidth > reqWidth) {
-
-
-			inSampleSize = Math.round((float) width / (float) reqWidth);
-		}
 
 		options.inSampleSize = inSampleSize;
 		options.inJustDecodeBounds = false;

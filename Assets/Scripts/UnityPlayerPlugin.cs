@@ -5,15 +5,20 @@ public class UnityPlayerPlugin : MonoBehaviour {
 	
 	public string className = "com.example.unity.FragmentDemo";  
     public Text callbackText = null;  
-    public Text resultText = null;  
+    public Text resultText = null;
+
+	public InputField cal_1;
+	public InputField cal_2;
     private AndroidJavaObject pluginObject = null;  
   
-    void Start()  
-    {  
+    public void Calculate()  
+    {
+		int a = int.Parse(cal_1.text);
+		int b = int.Parse(cal_2.text);
 #if UNITY_ANDROID && !UNITY_EDITOR  
         pluginObject = new AndroidJavaClass(className).CallStatic<AndroidJavaObject>("GetInstance", gameObject.name);  
         pluginObject.Call("SayHello");                                                                                 
-        resultText.text = pluginObject.Call<int>("CalculateAdd", 22, 33).ToString();   
+        resultText.text = pluginObject.Call<int>("CalculateAdd", a, b).ToString();   
 #endif  
     }  
   
